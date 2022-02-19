@@ -295,3 +295,113 @@ afpovertcp.cfg postgres-reg.ini
 **➜** **/etc** ls -d ????
 **cups** **snmp** ttys **uucp** xtab
 ```
+
+## [Permissions](https://ryanstutorials.net/linuxtutorial/permissions.php)
+-   First off, take a look at the permissions of your home directory, then have a look at the permissions of various files in there.
+```bash
+**➜** **~** ls -l 
+total 0
+drwx------@ 6 damianciepiela staff 192 Dec 30 18:35 **Applications**
+drwx------@ 4 damianciepiela staff 128 Nov 27 13:46 **Creative Cloud Files**
+drwx------@ 340 damianciepiela staff 10880 Feb 18 14:40 **Desktop**
+drwx------+ 14 damianciepiela staff 448 Feb 19 19:12 **Documents**
+drwx------@ 118 damianciepiela staff 3776 Feb 19 15:45 **Downloads**
+...
+```
+-   Now let's go into your linuxtutorialwork directory and change the permissions of some of the files in there. Make sure you use both the shorthand and longhand form for setting permissions and that you also use a variety of absolute and relative paths. Try removing the read permission from a file then reading it. Or removing the write permission and then opening it in vi.
+```bash
+**➜** **permissions** touch testFile 
+**➜** **permissions** mkdir test 
+**➜** **permissions** touch anotherTestFile
+**➜** **permissions** ls -l
+total 0
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:28 anotherTestFile
+drwxr-xr-x 2 damianciepiela staff 64 Feb 19 20:27 **test**
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:27 testFile
+**➜** **permissions** chmod u-r anotherTestFile
+**➜** **permissions** chmod 044 testFile 
+**➜** **permissions** ls -l
+total 0
+--w-r--r-- 1 damianciepiela staff 0 Feb 19 20:28 anotherTestFile
+drwxr-xr-x 2 damianciepiela staff 64 Feb 19 20:27 **test**
+----r--r-- 1 damianciepiela staff 0 Feb 19 20:27 testFile
+**➜** **permissions** vi testFile
+"testFile" [Permission Denied]
+**➜** **permissions** vi anotherTestFile
+"anotherTestFile" [Permission Denied]
+**➜** **permissions** cat testFile 
+cat: testFile: Permission denied
+**➜** **permissions** less anotherTestFile 
+anotherTestFile: Permission denied
+**➜** **permissions** chmod u+wr anotherTestFile testFile 
+**➜** **permissions** ls -l 
+total 0
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:28 anotherTestFile
+drwxr-xr-x 2 damianciepiela staff 64 Feb 19 20:27 **test**
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:27 testFile
+```
+-   Let's play with directories now. Create a directory and put some files into it. Now play about with removing various permissions from yourself on that directory and see what you can and can't do.
+```bash
+**➜** **permissions** chmod 055 test 
+**➜** **permissions** ls -l
+total 0
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:28 anotherTestFile
+d---r-xr-x 2 damianciepiela staff 64 Feb 19 20:27 **test**
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:27 testFile
+**➜** **permissions** cd test 
+cd: permission denied: test
+**➜** **permissions** ls -l test 
+total 0
+ls: test: Permission denied
+**➜** **permissions** mv anotherTestFile testFile ./test
+mv: rename anotherTestFile to ./test/anotherTestFile: Permission denied
+mv: rename testFile to ./test/testFile: Permission denied
+**➜** **permissions** chmod u+r test
+**➜** **permissions** ls -l ./test
+total 0
+**➜** **permissions** chmod u+x test
+**➜** **permissions** cd test 
+**➜** **test** cd ..
+**➜** **permissions** mv anotherTestFile ./test
+mv: rename anotherTestFile to ./test/anotherTestFile: Permission denied
+**➜** **permissions** touch ./test/testFile2
+touch: ./test/testFile2: Permission denied
+**➜** **permissions** chmod u+w test
+**➜** **permissions** mv anotherTestFile ./test
+**➜** **permissions** touch ./test/testFile2
+**➜** **permissions** ls -l ./test
+total 0
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:28 anotherTestFile
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 20:41 testFile2
+```
+-   Finally, have an explore around the system and see what the general permissions are for files in other system directories such as /etc and /bin
+```bash
+**➜** **/etc** ls -l 
+total 832
+-rw-r--r-- 1 root wheel 515 Dec 8 00:39 afpovertcp.cfg
+lrwxr-xr-x 1 root wheel 15 Dec 8 00:39 aliases -> postfix/aliases
+-rw-r----- 1 root wheel 16384 Dec 8 00:39 aliases.db
+drwxr-xr-x 9 root wheel 288 Dec 8 00:39 **apache2**
+drwxr-xr-x 17 root wheel 544 Dec 8 00:39 **asl**
+-rw-r--r-- 1 root wheel 1051 Dec 8 00:39 asl.conf
+-rw-r--r-- 1 root wheel 149 Dec 8 00:39 auto_home
+-rw-r--r-- 1 root wheel 195 Dec 8 00:39 auto_master
+-rw-r--r-- 1 root wheel 1935 Dec 8 00:39 autofs.conf
+...
+**➜** **/etc** ls -l /bin 
+total 9544
+-rwxr-xr-x 1 root wheel 150608 Dec 8 00:39 [
+-r-xr-xr-x 1 root wheel 1326560 Dec 8 00:39 bash
+-rwxr-xr-x 1 root wheel 151792 Dec 8 00:39 cat
+-rwxr-xr-x 1 root wheel 136944 Dec 8 00:39 chmod
+-rwxr-xr-x 1 root wheel 152640 Dec 8 00:39 cp
+-rwxr-xr-x 1 root wheel 1135936 Dec 8 00:39 csh
+-rwxr-xr-x 1 root wheel 307104 Dec 8 00:39 dash
+-rwxr-xr-x 1 root wheel 168912 Dec 8 00:39 date
+-rwxr-xr-x 1 root wheel 151520 Dec 8 00:39 dd
+-rwxr-xr-x 1 root wheel 151264 Dec 8 00:39 df
+-rwxr-xr-x 1 root wheel 150336 Dec 8 00:39 echo
+-rwxr-xr-x 1 root wheel 235248 Dec 8 00:39 ed
+-rwxr-xr-x 1 root wheel 151008 Dec 8 00:39 expr
+...
+```
