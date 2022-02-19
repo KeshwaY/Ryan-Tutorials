@@ -769,3 +769,55 @@ damianciepiela 8721 0.0 0.0 408636560 1712 s000 S+ 10:52PM 0:00.00 grep --color=
 [1] - 9330 done sleep 15
 ```
 
+## [Scripting](https://ryanstutorials.net/linuxtutorial/scripting.php)
+-   First off, think about writing your own backup script. You can make it as simple or complex as you like. Maybe start off with a really simple one and progressively improve it.
+```bash  
+#!/bin/bash
+if [ ! -d "$(pwd)/backup" ]; then
+ mkdir backup
+fi
+
+if [ $# != 1 ]; then
+ echo 'Usage: file to backup.'
+ exit
+fi
+  
+FILE=$(pwd)/$1  
+
+if [ ! -f $FIL ]; then
+ echo 'File does not exist!'
+ exit
+fi
+  
+DATE=`date +%F`
+WORKING_DIR=$(pwd)/backup/$1_$DATE
+if [ -f $WORKING_DIR ]; then
+ echo 'Overwrite file?'
+ read answer
+ if [ $answer != 'y' ]
+ then
+ exit
+ fi
+fi
+  
+cp $FILE $WORKING_DIR
+
+echo 'Backup completed'
+```
+-   Now see if you can write a script that will give you a report about a given directory. Things you could report on include
+    -   How many files are in the directory?
+    -   How many directories are in the directory?
+    -   What is the biggest file?
+    -   What is the most recently modified or created file?
+    -   A list of people who own files in the directory.
+    -   Anything else you can think of.
+```bash
+#!/bin/bash
+
+echo Files in directory: `ls -l | cut -w -f 1 | grep '^-' | wc -l`
+echo Directories in directory : `ls -l | cut -w -f 1 | grep '^d' | wc -l`
+echo Biggest file: `ls -l | cut -w -f 5,9 | sort -r | cut -w -f 2 | head -1`
+echo Most recently modified file: `ls -t | head -1`
+echo People who own files in directory: `ls -l | cut -w -f 3 | uniq`
+echo Scripts in directory: `ls -l | cut -w -f 9 | egrep '.sh$' | wc -l`
+```
