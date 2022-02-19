@@ -670,3 +670,60 @@ Fred **apples** 20
 Greg pine**apples** 3
 ```
 
+## [Piping and Redirection](https://ryanstutorials.net/linuxtutorial/piping.php)
+-   First off, experiment with saving output from various commands to a file. Overwrite the file and append to it as well. Make sure you are using a both absolute and relative paths as you go.
+```bash
+**➜** **grep** ls -l | tail -n +2 > text.txt
+**➜** **grep** cat text.txt 
+-rw-r--r-- 1 damianciepiela staff 197 Feb 19 21:55 data.txt
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 22:24 text.txt
+**➜** **grep** chmod u-rw data.txt
+**➜** **grep** cat data.txt 2>> text.txt 
+**➜** **grep** cat text.txt 
+-rw-r--r-- 1 damianciepiela staff 197 Feb 19 21:55 data.txt
+-rw-r--r-- 1 damianciepiela staff 0 Feb 19 22:24 text.txt
+cat: data.txt: Permission denied
+**➜** **grep** chmod u+rw data.txt
+**➜** **grep** cat text.txt 
+cat: data.txt: Permission denied
+ 197 data.txt
+**➜** **grep** ls -l /etc/ | tail -n +2 | cut -w -f 1 | sort | uniq > text.txt 
+**➜** **grep** cat text.txt
+-r--r-----
+-r--r--r--
+-rw-------
+-rw-r-----
+-rw-r--r--
+-rw-r--r--@
+drwxr-xr-x
+lrwxr-xr-x
+```
+-   Now see if you can list only the 20th last file in the directory /etc.
+```bash
+**➜** **grep** ls /etc/ | tail -20 
+rmtab
+rpc
+rtadvd.conf
+security
+services
+shells
+snmp
+ssh
+ssl
+sudo_lecture
+sudoers
+sudoers.d
+syslog.conf
+ttys
+uucp
+wfs
+xtab
+zprofile
+zshrc
+zshrc_Apple_Terminal
+```
+-   Finally, see if you can get a count of how many files and directories you have the execute permission for in your home directory.
+```bash
+**➜** **grep** ls -l ~ | cut -w -f1| grep '^...x' | wc -l
+ 21
+```
