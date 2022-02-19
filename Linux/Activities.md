@@ -229,3 +229,29 @@ total 24
 renamed_icon.png
 **➜** **~** ls test
 ```
+
+## [Vi](https://ryanstutorials.net/linuxtutorial/vi.php)
+-   Start by creating a file and putting some content into it.
+```bash
+**➜** **~** touch testFile 
+**➜** **~** vi testFile
+```
+-   Save the file and view it in both cat and less
+```bash
+**➜** **~** cat testFile 
+Test
+**➜** **~** vi testFile 
+**➜** **~** less testFile
+```
+-   Go back into the file in vi and enter some more content.
+```bash
+**➜** **~** vi testFile 
+```
+-   Move around the content using at least 6 different movement commands.
+```bash
+9G, 5b, b, w, e, ^, $, {, }
+```
+-   Play about with several of the delete commands, especially the ones that incorporate a movement command. Remember you may undo your changes so you don't have to keep putting new content in.
+```bash
+x, 10x, dd, 6dd
+```
