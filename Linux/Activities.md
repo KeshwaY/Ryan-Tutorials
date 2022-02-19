@@ -609,3 +609,64 @@ Mark grapes 39
  1 Oliver rockmellons 2
  1 Betty limes 14
 ```
+
+## [Grep and Regular Expressions](https://ryanstutorials.net/linuxtutorial/grep.php)
+-   First off, you may want to make a file with data similar to our sample file.
+```bash
+**➜** **grep** touch data.txt
+**➜** **grep** vi data.txt
+**➜** **grep** cat data.txt
+Fred apples 20
+Susy oranges 5
+Mark watermellons 12
+Robert pears 4
+Terry oranges 9
+Lisa peaches 7
+Susy oranges 12
+Mark grapes 39
+Anne mangoes 7
+Greg pineapples 3
+Oliver rockmellons 2
+Betty limes 14
+```
+-   Now play with some of the examples we looked at above.
+```bash
+**➜** **grep** egrep 'apples' data.txt 
+Fred **apples** 20
+Greg pine**apples** 3
+**➜** **grep** egrep -c 'apples' data.txt
+2
+**➜** **grep** egrep -n 'apples' data.txt 
+1:Fred **apples** 20
+10:Greg pine**apples** 3
+**➜** **grep** egrep '2.+' data.txt 
+Fred apples **20**
+**➜** **grep** egrep '3$' data.txt
+Greg pineapples **3**
+**➜** **grep** egrep '[p]{2}' data.txt
+Fred a**pp**les 20
+Greg pinea**pp**les 3
+**➜** **grep** egrep '^[F-Z]' data.txt 
+**F**red apples 20
+**S**usy oranges 5
+**M**ark watermellons 12
+**R**obert pears 4
+**T**erry oranges 9
+**L**isa peaches 7
+**S**usy oranges 12
+**M**ark grapes 39
+**G**reg pineapples 3
+**O**liver rockmellons 2
+```
+-   Have a look at the man page for egrep and try atleast 2 of the command line options for them.
+```bash
+**➜** **grep** egrep -H 'apples' data.txt
+data.txt:Fred **apples** 20
+data.txt:Greg pine**apples** 3
+**➜** **grep** egrep -c 'apples' data.txt
+2
+**➜** **grep** egrep -a 'apples' data.txt
+Fred **apples** 20
+Greg pine**apples** 3
+```
+
