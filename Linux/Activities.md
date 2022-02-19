@@ -405,3 +405,207 @@ total 9544
 -rwxr-xr-x 1 root wheel 151008 Dec 8 00:39 expr
 ...
 ```
+
+## [Filters](https://ryanstutorials.net/linuxtutorial/filters.php)
+-   First off, you may want to make a file with data similar to our sample file.
+```bash
+**➜** **filters** touch data.txt 
+**➜** **filters** vi data.txt 
+**➜** **filters** cat data.txt 
+Fred apples 20
+Susy oranges 5
+Mark watermellons 12
+Robert pears 4
+Terry oranges 9
+Lisa peaches 7
+Susy oranges 12
+Mark grapes 39
+Anne mangoes 7
+Greg pineapples 3
+Oliver rockmellons 2
+Betty limes 14
+```
+-   Now play with each of the programs we looked at above. Make sure you use both relative and absolute paths.
+```bash
+**➜** **filters** head -5 ./data.txt 
+Fred apples 20
+Susy oranges 5
+Mark watermellons 12
+Robert pears 4
+Terry oranges 9
+**➜** **filters** tail -2 ./data.txt 
+Oliver rockmellons 2
+Betty limes 14
+**➜** **filters** sort ./data.txt 
+Anne mangoes 7
+Betty limes 14
+Fred apples 20
+Greg pineapples 3
+Lisa peaches 7
+Mark grapes 39
+Mark watermellons 12
+Oliver rockmellons 2
+Robert pears 4
+Susy oranges 12
+Susy oranges 5
+Terry oranges 9
+**➜** **filters** nl ./data.txt 
+ 1 Fred apples 20
+ 2 Susy oranges 5
+ 3 Mark watermellons 12
+ 4 Robert pears 4
+ 5 Terry oranges 9
+ 6 Lisa peaches 7
+ 7 Susy oranges 12
+ 8 Mark grapes 39
+ 9 Anne mangoes 7
+ 10 Greg pineapples 3
+ 11 Oliver rockmellons 2
+ 12 Betty limes 14
+**➜** **filters** wc ./data.txt 
+ 12 36 197 ./data.txt
+**➜** **filters** cut -f 1 -d ' ' ./data.txt 
+Fred
+Susy
+Mark
+Robert
+Terry
+Lisa
+Susy
+Mark
+Anne
+Greg
+Oliver
+Betty
+**➜** **filters** sed 's/apples/test/g' ./data.txt
+Fred test 20
+Susy oranges 5
+Mark watermellons 12
+Robert pears 4
+Terry oranges 9
+Lisa peaches 7
+Susy oranges 12
+Mark grapes 39
+Anne mangoes 7
+Greg pinetest 3
+Oliver rockmellons 2
+Betty limes 14
+**➜** **filters** uniq data.txt 
+Fred apples 20
+Susy oranges 5
+Mark watermellons 12
+Robert pears 4
+Terry oranges 9
+Lisa peaches 7
+Susy oranges 12
+Mark grapes 39
+Anne mangoes 7
+Greg pineapples 3
+Oliver rockmellons 2
+Betty limes 14
+```
+-   Have a look at the man page for each of the programs and try at least 2 of the command line options for them.
+```bash
+**➜** **filters** head -c20 ./data.txt 
+Fred apples 20
+Susy **%**
+**➜** **filters** head -n2 ./data.txt 
+Fred apples 20
+Susy oranges 5
+**➜** **filters** tail -2 ./data.txt 
+Oliver rockmellons 2
+Betty limes 14
+**➜** **filters** tail -c20 ./data.txt 
+ns 2
+Betty limes 14
+**➜** **filters** tail -2 -r ./data.txt
+Betty limes 14
+Oliver rockmellons 2
+**➜** **filters** sort -c ./data.txt 
+sort: ./data.txt:3: disorder: Mark watermellons 12
+**➜** **filters** sort -u -o test.txt ./data.txt
+**➜** **filters** nl -i2 ./data.txt 
+ 1 Fred apples 20
+ 3 Susy oranges 5
+ 5 Mark watermellons 12
+ 7 Robert pears 4
+ 9 Terry oranges 9
+ 11 Lisa peaches 7
+ 13 Susy oranges 12
+ 15 Mark grapes 39
+ 17 Anne mangoes 7
+ 19 Greg pineapples 3
+ 21 Oliver rockmellons 2
+ 23 Betty limes 14
+**➜** **filters** nl -s '. ' -v10 ./data.txt 
+ 10. Fred apples 20
+ 11. Susy oranges 5
+ 12. Mark watermellons 12
+ 13. Robert pears 4
+ 14. Terry oranges 9
+ 15. Lisa peaches 7
+ 16. Susy oranges 12
+ 17. Mark grapes 39
+ 18. Anne mangoes 7
+ 19. Greg pineapples 3
+ 20. Oliver rockmellons 2
+ 21. Betty limes 14
+**➜** **filters** wc -lm ./data.txt 
+ 12 197 ./data.txt
+**➜** **filters** wc -lw ./data.txt
+ 12 36 ./data.txt
+**➜** **filters** cut -f 1,2 -w ./data.txt
+Fred apples
+Susy oranges
+Mark watermellons
+Robert pears
+Terry oranges
+Lisa peaches
+Susy oranges
+Mark grapes
+Anne mangoes
+Greg pineapples
+Oliver rockmellons
+Betty limes
+**➜** **filters** cut -f 1,2 -ws ./data.txt
+Fred apples
+Susy oranges
+Mark watermellons
+Robert pears
+Terry oranges
+Lisa peaches
+Susy oranges
+Mark grapes
+Anne mangoes
+Greg pineapples
+Oliver rockmellons
+Betty limes
+**➜** **filters** sed -n '4p' ./data.txt 
+Robert pears 4
+**➜** **filters** sed -n '4,6!p' /Users/damianciepiela/linuxtutorialwork/filters/data.txt 
+Fred apples 20
+Susy oranges 5
+Mark watermellons 12
+Susy oranges 12
+Mark grapes 39
+Anne mangoes 7
+Greg pineapples 3
+Oliver rockmellons 2
+Betty limes 14
+**➜** **filters** uniq -d data.txt 
+Susy oranges 5
+Mark grapes 39
+**➜** **filters** uniq -c ./data.txt 
+ 1 Fred apples 20
+ 3 Susy oranges 5
+ 1 Mark watermellons 12
+ 1 Robert pears 4
+ 1 Terry oranges 9
+ 1 Lisa peaches 7
+ 1 Susy oranges 12
+ 2 Mark grapes 39
+ 1 Anne mangoes 7
+ 1 Greg pineapples 3
+ 1 Oliver rockmellons 2
+ 1 Betty limes 14
+```
