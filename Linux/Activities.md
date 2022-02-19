@@ -255,3 +255,43 @@ Test
 ```bash
 x, 10x, dd, 6dd
 ```
+
+## [Wildcards](https://ryanstutorials.net/linuxtutorial/wildcards.php)
+-   A good directory to play with is /etc which is a directory containing config files for the system. As a normal user you may view the files but you can't make any changes so we can't do any harm. Do a listing of that directory to see what's there. Then pick various subsets of files and see if you can create a pattern to select only those files.
+```bash
+**➜** **/etc** ls -lh *.conf
+-rw-r--r-- 1 root wheel 1.0K Dec 8 00:39 asl.conf
+-rw-r--r-- 1 root wheel 1.9K Dec 8 00:39 autofs.conf
+-rw-r--r-- 1 root wheel 0B Dec 8 00:39 kern_loader.conf
+...
+**➜** **/etc** ls -d *.d 
+**emond.d** **manpaths.d** **newsyslog.d** **pam.d** **paths.d** **sudoers.d**
+**➜** **/etc** ls -d ?a*
+bashrc man.conf master.passwd passwd **racoon**
+bashrc_Apple_Terminal manpaths nanorc paths
+mail.rc **manpaths.d** **pam.d** **paths.d**
+```
+-   Do a listing of /etc with only files that contain an extension.
+```bash
+**➜** **/etc** ls -lh *.conf
+-rw-r--r-- 1 root wheel 1.0K Dec 8 00:39 asl.conf
+-rw-r--r-- 1 root wheel 1.9K Dec 8 00:39 autofs.conf
+-rw-r--r-- 1 root wheel 0B Dec 8 00:39 kern_loader.conf
+...
+```
+-   What about only a 3 letter extension?
+```bash
+**➜** **/etc** ls *.??? 
+afpovertcp.cfg postgres-reg.ini
+```
+-   How about files whose name contains an uppercase letter? (hint: [[:upper:]] may be useful here)
+```bash
+**➜** **/etc** ls -l *[[:upper:]]*
+-rw-r--r-- 1 root wheel 9309 Dec 8 00:39 bashrc_Apple_Terminal
+-rw-r--r-- 1 root wheel 9335 Dec 8 00:39 zshrc_Apple_Terminal
+```
+-   Can you list files whose name is 4 characters long?
+```bash
+**➜** **/etc** ls -d ????
+**cups** **snmp** ttys **uucp** xtab
+```
