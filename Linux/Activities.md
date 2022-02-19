@@ -727,3 +727,45 @@ zshrc_Apple_Terminal
 **➜** **grep** ls -l ~ | cut -w -f1| grep '^...x' | wc -l
  21
 ```
+
+## [Process Management](https://ryanstutorials.net/linuxtutorial/piping.php)
+
+-   First off, start a few programs in your desktop. Then use ps to identify their PID and kill them.
+```bash
+**➜** **grep** ps aux | grep 'firefox'
+damianciepiela 8131 1.0 4.2 420540496 351648 ?? S 10:50PM 0:04.11 /Applications/Firefox.app/Contents/MacOS/**firefox**
+damianciepiela 8206 0.0 0.0 408628368 1616 s000 S+ 10:50PM 0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude-dir=.idea --exclude-dir=.tox **firefox**
+**➜** **grep** kill 8131 
+**➜** **grep** ps aux | grep 'firefox'
+damianciepiela 8245 0.0 0.0 408628368 1616 s000 S+ 10:50PM 0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude-dir=.idea --exclude-dir=.tox **firefox**
+**➜** **grep** top
+**➜** **grep** kill 8155
+**➜** **grep** ps aux | grep 'Photo Booth'
+damianciepiela 8536 14.2 0.6 409872880 50144 ?? S 10:52PM 0:06.67 /System/Applications/**Photo Booth**.app/Contents/MacOS/**Photo Booth**
+damianciepiela 8721 0.0 0.0 408636560 1712 s000 S+ 10:52PM 0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude-dir=.idea --exclude-dir=.tox **Photo Booth**
+**➜** **grep** kill 8536
+```
+-   Now see if you can do the same, but switch to another virtual console first.
+-   Finally, play about with the command sleep and moving processes between the foreground and background.
+```bash
+**➜** **grep** sleep 20&
+[1] 9161
+**➜** **grep** sleep 15 
+^Z
+[2] + 9185 suspended sleep 15
+**➜** **grep** jobs
+[1] - running sleep 20
+[2] + suspended sleep 15
+**➜** **grep** fg %2
+[2] - 9185 continued sleep 15
+**➜** **grep** 
+[1] + 9161 done sleep 20
+**➜** **grep** sleep 15 
+^Z
+[1] + 9330 suspended sleep 15
+**➜** **grep** bg %1
+[1] - 9330 continued sleep 15
+**➜** **grep** 
+[1] - 9330 done sleep 15
+```
+
