@@ -161,3 +161,71 @@ kpasswdd(8) - Kerberos 5 password changing server
 ...
 (END)
 ```
+
+## [File manipulation](https://ryanstutorials.net/linuxtutorial/filemanipulation.php)
+-   Start by creating a directory in your home directory in which to experiment.
+```bash
+**➜** **Ryan tutorials** **git:(****main****)** man git 
+**➜** **Ryan tutorials** **git:(****main****)** cd 
+**➜** **~** mkdir test
+**➜** **~** cd test
+```
+-   In that directory, create a series of files and directories (and files and directories in those directories).
+```bash
+**➜** **test** mkdir testDirectory
+**➜** **test** mkdir 'test directory'    
+**➜** **test** touch testFile 
+**➜** **test** touch 'test file'
+**➜** **test** ls
+**test directory** test file **testDirectory** testFile
+```
+-   Now rename a few of those files and directories.
+```bash
+**➜** **test** mv testDirectory testDirectory1 
+**➜** **test** mv test\ directory test\ directory2
+**➜** **test** ls
+**test directory2** test file **testDirectory1** testFile
+**➜** **test** mv testFile testFile1
+**➜** **test** mv test\ file test\ file2 
+**➜** **test** ls
+**test directory2** test file2 **testDirectory1** testFile1
+```
+-   Delete one of the directories that has other files and directories in them.
+```bash
+**➜** **test** mv test\ file2 testDirectory1
+**➜** **test** mv testFile1 test\ directory2
+**➜** **test** mv testDirectory1 test\ directory2
+**➜** **test** rm -r test\ directory2 
+**➜** **test** ls
+```
+-   Move back to your home directory and from there copy a file from one of your subdirectories into the initial directory you created.
+```bash
+**➜** **test** cd
+**➜** **~** cp ./backups/world.20211107165743/icon.png ./test
+```
+-   Now move that file back into another directory.
+```bash
+**➜** **~** ls ./test 
+icon.png
+**➜** **~** mv ./test/icon.png ./Documents 
+**➜** **~** ls ./Documents
+**➜** **~** ls -lt ./Documents 
+total 24
+-rw-r--r-- 1 damianciepiela staff 10102 Feb 19 19:09 icon.png
+```
+-   Rename a few files
+```bash
+**➜** **~** mv test test123
+**➜** **~** mv Documents documents
+**➜** **~** mv documents Documents
+**➜** **~** mv test123 test
+```
+-   Next, move a file and rename it in the process.
+```bash
+**➜** **~** mv icon.png test 
+**➜** **~** mkdir test2 
+**➜** **~** mv ./test/icon.png ./test2/renamed_icon.png
+**➜** **~** ls test2 
+renamed_icon.png
+**➜** **~** ls test
+```
