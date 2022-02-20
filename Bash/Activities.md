@@ -194,5 +194,224 @@ case $DAY in
 esac
 ```
 
+## [Loops](https://ryanstutorials.net/bash-scripting-tutorial/bash-loops.php)
+-   Create a simple script which will print the numbers 1 - 10 (each on a separate line) and whether they are even or odd.
+```bash
+#!/bin/bash
+for i in {1..10}
+do
+        echo $i
+        if (( i % 2 == 0))
+        then
+                echo Even
+        else
+                echo Odd
+        fi
+done
+```
+-   Write a Bash script which will take a single command line argument (a directory) and will print each entry in that directory. If the entry is a file it will print it's size. If the entry is a directory it will print how many items are in that directory.
+```bash
+#!/bin/bash
+MYDIR=$(pwd)/$1/
+for FILE in $MYDIR/*
+do
+        if [ -d $FILE ]
+        then
+                COUNT=0
+                for INNERFILE in $FILE/*
+                do
+                        ((COUNT++))
+                done
+                echo Directory $(basename $FILE), files in directory: $COUNT
+        else
+                echo File $(basename $FILE), size $(ls -lh $FILE | cut -w -f 5)
+        fi
+done
+```
+-   Create a command line version of the game [Mastermind](http://codebreaker.creativitygames.net/). Instead of coloured marbles you could use letters or numbers or be creative and find another way.
+```bash
+#!/bin/bash
+SECRET=()
+for i in {0..4}
+do
+	SECRET[i]=$(( $RANDOM % 8 + 1 ))
+done
+echo ${SECRET[@]}
 
+TRIES=1
+MAX_TRIES=8
+
+WHITE="W"
+BLACK="B"
+NONE="N"
+HELP_TEXT="$WHITE - WHITE, $BLACK - BLACK, $NONE - None match"
+
+RESULT=1
+
+while [ $TRIES -le $MAX_TRIES ]
+do
+	read -p "Enter five number form 1 to 8 (ex. 1 8 2 7 3): " INPUT
+	ARR=( $INPUT )
+	if (( ${#ARR[@]} != 5 ))
+	then
+		continue
+	fi
+	OUTPUT=""
+	COUNTER=0
+	for I in {0..4}
+	do
+		#echo ${SECRET[I]}
+		#echo ${ARR[I]}
+		if [ ${SECRET[I]} -eq ${ARR[I]} ]
+		then
+			(( COUNTER++ ))
+			OUTPUT+=$WHITE
+		else
+			FOUND=1
+			for J in {0..4}
+			do
+				if [ ${SECRET[J]} -eq ${ARR[I]} ]
+				then
+					FOUND=0
+				fi
+			done
+			if (( FOUND == 0 ))
+			then
+				OUTPUT+=$BLACK
+			else
+				OUTPUT+=$NONE
+			fi
+		fi
+	done
+	echo $OUTPUT
+	echo $HELP_TEXT
+	echo Tries: $TRIES
+	if (( COUNTER == 5 ))
+	then
+		RESULT=0
+		break
+	fi
+	(( TRIES++ ))
+done
+if (( RESULT == 0 ))
+then
+	echo You won!
+else
+	echo You lost!
+fi
+```
+-   Create a command line version of the game Tic Tac Toe. Make it so you can play against the computer.
+```bash
+#!/bin/bash
+EMPTY="N"
+PLAYER_1="X"
+PLAYER_2="O"
+
+FIRST_ROW=( N N N )
+SECOND_ROW=( N N N )
+THIRD_ROW=( N N N )
+
+REGEX=^[1-3]$
+
+while [ true ]
+do
+	echo ${FIRST_ROW[@]}
+	echo ${SECOND_ROW[@]}
+	echo ${THIRD_ROW[@]}
+	read -p "Enter indexes for placement(from 1 to 3, ex. 1 2): " FIRST SECOND	
+	if [[ ! $FIRST =~ $REGEX ]] || [[ ! $SECOND =~ $REGEX ]]
+	then
+		continue
+	fi
+	(( SECOND-- ))	
+	case $FIRST in
+		1)
+			if [ ! ${FIRST_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			FIRST_ROW[SECOND]=$PLAYER_1
+			;;
+		2)
+			if [ ! ${SECOND_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			SECOND_ROW[SECOND]=$PLAYER_1
+			;;
+		3)
+			if [ ! ${THIRD_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			THIRD_ROW[SECOND]=$PLAYER_1
+			;;
+	esac
+	
+	while [ true ]
+	do
+		COMPUTER_FIRST=$(( $RANDOM % 3 + 1 ))
+		COMPUTER_SECOND=$(( $RANDOM % 2 ))
+		case $COMPUTER_FIRST in
+		1)
+			if [ ! ${FIRST_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			FIRST_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		2)
+			if [ ! ${SECOND_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			SECOND_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		3)
+			if [ ! ${THIRD_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			THIRD_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		esac
+		break
+	done
+
+	MERGED=( ${FIRST_ROW[@]} ${SECOND_ROW[@]} ${THIRD_ROW[@]} )
+	if [[ ${MERGED[0]} != $EMPTY && ${MERGED[1]} != $EMPTY && ${MERGED[2]} != $EMPTY ]] && [[ ${MERGED[0]} == ${MERGED[1]} && ${MERGED[1]} == ${MERGED[2]} ]]
+	then
+		break
+	elif [[ ${MERGED[3]} != $EMPTY && ${MERGED[4]} != $EMPTY && ${MERGED[5]} != $EMPTY ]] && [[ ${MERGED[3]} == ${MERGED[4]} && ${MERGED[4]} == ${MERGED[5]} ]]
+	then
+		break
+	elif [[ ${MERGED[6]} != $EMPTY && ${MERGED[7]} != $EMPTY && ${MERGED[8]} != $EMPTY ]] && [[ ${MERGED[6]} == ${MERGED[7]} && ${MERGED[7]} == ${MERGED[8]} ]]
+	then
+		break
+	elif [[ ${MERGED[0]} != $EMPTY && ${MERGED[4]} != $EMPTY && ${MERGED[8]} != $EMPTY ]] && [[ ${MERGED[0]} == ${MERGED[4]} && ${MERGED[4]} == ${MERGED[8]} ]]
+	then
+		break
+	elif [[ ${MERGED[2]} != $EMPTY && ${MERGED[4]} != $EMPTY && ${MERGED[6]} != $EMPTY ]] && [[ ${MERGED[2]} == ${MERGED[4]} && ${MERGED[4]} == ${MERGED[6]} ]]
+	then
+		break
+	elif [[ ${MERGED[0]} != $EMPTY && ${MERGED[3]} != $EMPTY && ${MERGED[6]} != $EMPTY ]] && [[ ${MERGED[0]} == ${MERGED[3]} && ${MERGED[3]} == ${MERGED[6]} ]]
+	then
+		break
+	elif [[ ${MERGED[1]} != $EMPTY && ${MERGED[4]} != $EMPTY && ${MERGED[7]} != $EMPTY ]] && [[ ${MERGED[1]} == ${MERGED[4]} && ${MERGED[4]} == ${MERGED[7]} ]]
+	then
+		break
+	elif [[ ${MERGED[2]} != $EMPTY && ${MERGED[5]} != $EMPTY && ${MERGED[8]} != $EMPTY ]] && [[ ${MERGED[2]} == ${MERGED[5]} && ${MERGED[5]} == ${MERGED[8]} ]]
+	then
+		break
+	fi
+
+done
+
+echo ${FIRST_ROW[@]}
+echo ${SECOND_ROW[@]}
+echo ${THIRD_ROW[@]}
+```
 
