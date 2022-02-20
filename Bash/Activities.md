@@ -106,3 +106,34 @@ cat /dev/stdin | sed -n "3p"
 #!/bin/bash
 ls -lh | awk '{print $9" "$5" "$3}'
 ```
+
+## [Arithmetic](https://ryanstutorials.net/bash-scripting-tutorial/bash-arithmetic.php)
+-   Create a simple script which will take two command line arguments and then multiply them together using each of the methods detailed above.
+```bash
+#!/bin/bash
+let "a = $1 * $2"
+echo $a
+
+expr $1 \* $2
+
+b=$(( $1 * $2 ))
+echo $b
+```
+-   Write a Bash script which will print tomorrows date. (Hint: use the command **date**)
+```bash
+#!/bin/bash
+today=$(date +%s)
+tomorrow=$(( $today + 86400 ))
+echo $(date -r $tomorrow)
+```
+-   Remember when we looked at [variables](https://ryanstutorials.net/bash-scripting-tutorial/bash-variables.php) we discovered $RANDOM will return a random number. This number is between 0 and 32767 which is not always the most useful. Let's write a script which will use this variable and some arithmetic (hint: play with modulus) to return a random number between 0 and 100.
+```bash
+#!/bin/bash
+echo $(($RANDOM % 100))
+```
+-   Now let's play with the previous script. Modify it so that you can specify as a command line argument the upper limit of the random number. Can you make it so that a lower limit can be specified also? eg. if I ran ./random.sh 10 45 it would only return random numbers between 10 and 45.
+```bash
+#!/bin/bash
+echo $(($RANDOM % $2 + $1))
+```
+
