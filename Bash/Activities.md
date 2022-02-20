@@ -351,6 +351,8 @@ do
 			;;
 	esac
 	
+	TURN=1
+	
 	while [ true ]
 	do
 		COMPUTER_FIRST=$(( $RANDOM % 3 + 1 ))
@@ -407,7 +409,11 @@ do
 	then
 		break
 	fi
-
+	
+	if [ $TURN -gt 9 ]
+	then
+    		break
+  	fi
 done
 
 echo ${FIRST_ROW[@]}
@@ -415,3 +421,113 @@ echo ${SECOND_ROW[@]}
 echo ${THIRD_ROW[@]}
 ```
 
+
+## [Functions](https://ryanstutorials.net/bash-scripting-tutorial/bash-functions.php)
+```bash
+#!/bin/bash
+EMPTY="N"
+PLAYER_1="X"
+PLAYER_2="O"
+
+FIRST_ROW=( N N N )
+SECOND_ROW=( N N N )
+THIRD_ROW=( N N N )
+
+REGEX=^[1-3]$
+
+validate() {
+	if [[ ${MERGED[$1]} != $EMPTY && ${MERGED[$2]} != $EMPTY && ${MERGED[$3]} != $EMPTY ]] && [[ ${MERGED[$1]} == ${MERGED[$2]} && ${MERGED[$2]} == ${MERGED[$3]} ]]
+	then
+		GAME=false
+	fi
+}
+
+GAME=true
+TURN=1
+while $GAME
+do
+	echo ${FIRST_ROW[@]}
+	echo ${SECOND_ROW[@]}
+	echo ${THIRD_ROW[@]}
+	read -p "Enter indexes for placement(from 1 to 3, ex. 1 2): " FIRST SECOND	
+	if [[ ! $FIRST =~ $REGEX ]] || [[ ! $SECOND =~ $REGEX ]]
+	then
+		continue
+	fi
+	(( SECOND-- ))	
+	case $FIRST in
+		1)
+			if [ ! ${FIRST_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			FIRST_ROW[SECOND]=$PLAYER_1
+			;;
+		2)
+			if [ ! ${SECOND_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			SECOND_ROW[SECOND]=$PLAYER_1
+			;;
+		3)
+			if [ ! ${THIRD_ROW[SECOND]} = $EMPTY ]
+			then
+				echo Index already selected
+				continue
+			fi
+			THIRD_ROW[SECOND]=$PLAYER_1
+			;;
+	esac
+	
+	while [ true ]
+	do
+		COMPUTER_FIRST=$(( $RANDOM % 3 + 1 ))
+		COMPUTER_SECOND=$(( $RANDOM % 2 ))
+		case $COMPUTER_FIRST in
+		1)
+			if [ ! ${FIRST_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			FIRST_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		2)
+			if [ ! ${SECOND_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			SECOND_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		3)
+			if [ ! ${THIRD_ROW[COMPUTER_SECOND]} = $EMPTY ]
+			then
+				continue
+			fi
+			THIRD_ROW[COMPUTER_SECOND]=$PLAYER_2
+			;;
+		esac
+		break
+	done
+
+	MERGED=( ${FIRST_ROW[@]} ${SECOND_ROW[@]} ${THIRD_ROW[@]} )
+	validate 0 1 2
+	validate 3 4 5
+	validate 6 7 8
+	validate 0 4 8
+	validate 2 4 6
+	validate 0 3 6
+	validate 1 4 7
+	validate 2 5 8
+	if [ $TURN -gt 9 ]
+	then
+    		GAME=false
+  	fi
+done
+
+echo ${FIRST_ROW[@]}
+echo ${SECOND_ROW[@]}
+echo ${THIRD_ROW[@]}
+```
