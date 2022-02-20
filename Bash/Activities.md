@@ -67,3 +67,42 @@ for FILE in "$@"; do
  cp $(pwd)/$FILE $(pwd)/"$FILE_NAME"_`date +%F`."$FILE_EXT"
 done
 ```
+
+## [User input](https://ryanstutorials.net/bash-scripting-tutorial/bash-input.php)
+-   Create a simple script which will ask the user for a few pieces of information then combine this into a message which is echo'd to the screen.
+```bash
+#!/bin/bash
+read -p "Your name: " NAME
+read -p "Your last name: " LAST_NAME
+read -p "Date of birth: " BIRTH_DATE
+echo Your first name: $NAME
+echo Your last name: $LAST_NAME
+echo Date of birth: $BIRTH_DATE
+```
+-   Add to the previous script to add in some data coming from command line arguments and maybe some of the other system variables.
+```bash
+#!/bin/bash
+read -p "Your name: " NAME
+read -p "Your last name: " LAST_NAME
+read -p "Date of birth: " BIRTH_DATE
+
+echo Your first name: $NAME
+echo Your last name: $LAST_NAME
+echo Date of birth: $BIRTH_DATE
+
+echo My favorite food:
+for FOOD in "$@"; do
+        echo $FOOD
+done
+echo My home directory: $HOME
+```
+-   Create a script which will take data from STDIN and print the 3rd line only.
+```bash
+#!/bin/bash
+cat /dev/stdin | sed -n "3p"
+```
+-   Now play about with creating a script which will behave as a filter. Create a script which will rearrange the output of the command **ls -l** in a useful way (eg maybe you only print the filename, size and owner) (Hint: [awk](https://ryanstutorials.net/linuxtutorial/bonus.php#awk) can be useful here).
+```bash
+#!/bin/bash
+ls -lh | awk '{print $9" "$5" "$3}'
+```
