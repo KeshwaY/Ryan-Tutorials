@@ -784,7 +784,7 @@ fi
   
 FILE=$(pwd)/$1  
 
-if [ ! -f $FIL ]; then
+if [ ! -f $FILE ]; then
  echo 'File does not exist!'
  exit
 fi
