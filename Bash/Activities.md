@@ -137,3 +137,62 @@ echo $(($RANDOM % 100))
 echo $(($RANDOM % $2 + $1))
 ```
 
+## [If Statements](https://ryanstutorials.net/bash-scripting-tutorial/bash-if-statements.php#introduction)
+-   Create a Bash script which will take 2 numbers as command line arguments. It will print to the screen the larger of the two numbers.
+```bash
+#!/bin/bash
+if (( $1 > $2 ))
+then
+        echo $1
+else
+        echo $2
+fi
+```
+-   Create a Bash script which will accept a file as a command line argument and analyse it in certain ways. eg. you could check if the file is executable or writable. You should print a certain message if true and another if false.
+```bash
+#!/bin/bash
+FILE=$(pwd)/$1
+if [ -w $FILE ] && [ -x $FILE ]
+then
+        echo File is writable and executable
+elif [ ! -w $FILE ] && [ -x $FILE ]
+then
+        echo File is executable
+elif [ -w $FILE ] && [ ! -x $FILE ]
+then
+        echo File is writable
+else
+        echo File is not writable nor exectubale
+fi
+```
+-   Create a Bash script which will print a message based upon which day of the week it is (eg. 'Happy hump day' for Wedensday, 'TGIF' for Friday etc).
+```bash
+#!/bin/bash
+DAY=`date +%A`
+case $DAY in
+        Monday)
+                echo Monday
+        ;;
+        Tuesday)
+                echo Tuesday
+        ;;
+        Wednesday)
+                echo Wednesday
+        ;;
+        Thursday)
+                echo Thursday
+        ;;
+        Friday)
+                echo Friday
+        ;;
+        Saturday)
+                echo Saturday
+        ;;
+        Sunday)
+                echo Sunday
+        ;;
+esac
+```
+
+
+
