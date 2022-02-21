@@ -409,7 +409,7 @@ do
 	then
 		break
 	fi
-	
+	(( TURN ++ ))
 	if [ $TURN -gt 9 ]
 	then
     		break
@@ -521,6 +521,7 @@ do
 	validate 0 3 6
 	validate 1 4 7
 	validate 2 5 8
+	(( TURN++ ))
 	if [ $TURN -gt 9 ]
 	then
     		GAME=false
